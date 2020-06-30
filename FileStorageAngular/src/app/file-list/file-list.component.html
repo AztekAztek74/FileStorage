@@ -1,0 +1,23 @@
+<div class="container__file-list">
+  <section class="file-list">
+    <div>
+      <div>
+        <p>File</p>
+      </div>
+      <div>
+        <p>User</p>
+      </div>
+      <div>
+        <p>DELL</p>
+      </div>
+      <div class="file-list__container">
+        <app-file-item
+          *ngFor="let item of dataset"
+          [item]="item"
+          [getList]="getList"
+        >
+        </app-file-item>
+      </div>
+    </div>
+  </section>
+</div>

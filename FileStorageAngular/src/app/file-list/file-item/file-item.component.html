@@ -1,0 +1,16 @@
+<div>
+  <div (click)="onDownload(item.FileId, item.FileName)">
+    <p>{{ item.FileName }}</p>
+  </div>
+  <div>
+    <p>{{ item.User }}</p>
+  </div>
+  <div (click)="click(item.Date)">
+    <p>{{ item.Date }}</p>
+  </div>
+  <div>
+    <p (click)="onDelete(item.FileId)">
+      &#9003;
+    </p>
+  </div>
+</div>
