@@ -38,7 +38,7 @@ export class FileItemComponent implements OnInit {
     anchor.click();
   }
 
-  click(date) {
-    console.log(typeof date);
+  onClick(item: Dataset) {
+    console.log(item);
   }
 }

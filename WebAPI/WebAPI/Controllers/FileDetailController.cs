@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using WebAPI.Models;
 using MimeMapping;
+using System.Security.Cryptography;
 
 namespace WebAPI.Controllers
 {
@@ -94,7 +95,8 @@ namespace WebAPI.Controllers
         public async Task<ActionResult<FileDetail>> PostFileDetail()
         {
             
-            await _context.SaveChangesAsync();
+            var ListDB = _context.FileDetails.ToListAsync();
+
             try
             {
                 var file = Request.Form.Files[0];
@@ -104,13 +106,26 @@ namespace WebAPI.Controllers
                 {
                     var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Value.Trim('"');
                     var fullPath = Path.Combine(pathToSave, fileName);
-                    //var dbPath = Path.Combine(folderName, fileName);
+
+                    Queue<int> SelectID = new Queue<int>();
+
+                    byte[] checksum;
 
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
+                                             
                         await file.CopyToAsync(stream);
                     }
-                    var newRecord = new FileDetail { FileName = fileName, FilePath = fullPath, User = Environment.UserDomainName, Date = DateTime.Now};
+
+                    using (FileStream stream = System.IO.File.OpenRead(fullPath))
+                    {
+                        var sha = new SHA256Managed();
+                        checksum = sha.ComputeHash(stream);
+                    }
+
+                    //foreach(int item in ListDB)
+
+                    var newRecord = new FileDetail { FileName = fileName, FilePath = fullPath, User = Environment.UserDomainName, Date = DateTime.Now, NumberRecords  = 0, FileSha256  = checksum };
                     _context.FileDetails.Add(newRecord);
                     await _context.SaveChangesAsync();
                     return Ok();
