@@ -94,22 +94,24 @@ namespace WebAPI.Controllers
         [HttpPost, DisableRequestSizeLimit]
         public async Task<ActionResult<FileDetail>> PostFileDetail()
         {
-            
-            var ListDB = _context.FileDetails.ToListAsync();
-
             try
             {
+                await _context.FileDetails.ToListAsync();
+
                 var file = Request.Form.Files[0];
                 var folderName = Path.Combine("Resources", "Files");
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                 if(file.Length>0)
                 {
                     var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Value.Trim('"');
-                    var fullPath = Path.Combine(pathToSave, fileName);
+                    var fullPath = Path.Combine(pathToSave, Path.GetRandomFileName());
 
-                    Queue<int> SelectID = new Queue<int>();
+                    var records = 1;
 
-                    byte[] checksum;
+                    var temporaryPath = "";
+
+
+                    byte[] shaFile;
 
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
@@ -117,15 +119,29 @@ namespace WebAPI.Controllers
                         await file.CopyToAsync(stream);
                     }
 
-                    using (FileStream stream = System.IO.File.OpenRead(fullPath))
+                    using(FileStream stream = System.IO.File.OpenRead(fullPath))
                     {
                         var sha = new SHA256Managed();
-                        checksum = sha.ComputeHash(stream);
+                        shaFile = sha.ComputeHash(stream);
                     }
 
-                    //foreach(int item in ListDB)
+                    foreach(var item in _context.FileDetails)
+                    {
+                        if (BitConverter.ToString(item.FileSha256) == BitConverter.ToString(shaFile))
+                        {
+                            records = ++item.NumberRecords;
+                            temporaryPath = item.FilePath;                            
+                        }
+                    }
 
-                    var newRecord = new FileDetail { FileName = fileName, FilePath = fullPath, User = Environment.UserDomainName, Date = DateTime.Now, NumberRecords  = 0, FileSha256  = checksum };
+                    if (temporaryPath.Length > 0)
+                    {
+                        System.IO.File.Delete(fullPath);
+                        fullPath = temporaryPath;
+                    }
+
+
+                    var newRecord = new FileDetail { FileName = fileName, FilePath = fullPath, User = Environment.UserDomainName, Date = DateTime.Now, NumberRecords  = records, FileSha256  = shaFile };
                     _context.FileDetails.Add(newRecord);
                     await _context.SaveChangesAsync();
                     return Ok();
@@ -149,13 +165,28 @@ namespace WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<FileDetail>> DeleteFileDetail(int id)
         {
+            await _context.FileDetails.ToListAsync();
             var fileDetail = await _context.FileDetails.FindAsync(id);
             if (fileDetail == null)
             {
                 return NotFound();
             }
 
-            System.IO.File.Delete(fileDetail.FilePath);
+            if (fileDetail.NumberRecords == 1)
+            {
+
+                System.IO.File.Delete(fileDetail.FilePath);
+            }
+            else
+            {
+                foreach (var item in _context.FileDetails)
+                {
+                    if (BitConverter.ToString(item.FileSha256) == BitConverter.ToString(fileDetail.FileSha256))
+                    {
+                        item.NumberRecords--;
+                    }
+                }
+            }
 
             _context.FileDetails.Remove(fileDetail);
             await _context.SaveChangesAsync();
