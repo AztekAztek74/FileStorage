@@ -5,5 +5,5 @@ export interface Dataset {
   User: string;
   Date: string;
   NumberRecords: number;
-  FileSha256: Array<number>;
+  FileSha256: string;
 }

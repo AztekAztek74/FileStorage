@@ -145,7 +145,6 @@ namespace WebAPI.Controllers
                     _context.FileDetails.Add(newRecord);
                     await _context.SaveChangesAsync();
                     return Ok();
-                    //return CreatedAtAction("GetFileDetail", new { id = fileDetail.FileId, FileName = fileName, FilePath = fullPath, fileDetail.User, Date = DateTime.Now });
                 }
                 else
                 {

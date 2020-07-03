@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Dataset } from 'src/app/_interfaces/dataset.model';
 import { FileListService } from '../../services/file-list.service';
-import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-file-item',
@@ -15,6 +14,11 @@ export class FileItemComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  getDate(str) {
+    const date: number[] = str.split('T')[0].split('-');
+    return `${date[2]}:${date[1]}:${date[0]}`;
+  }
+
   onDelete(id: number) {
     this.fileListService.deleteFile(id).subscribe((event) => {
       this.getList();
@@ -23,7 +27,6 @@ export class FileItemComponent implements OnInit {
 
   onDownload(id: number, name: string) {
     this.fileListService.downloadFile(id).subscribe((resp) => {
-      console.log(resp);
       this.downLoadFile(resp, name);
     });
     console.log(id);
@@ -36,9 +39,5 @@ export class FileItemComponent implements OnInit {
     anchor.download = name;
     anchor.href = url;
     anchor.click();
-  }
-
-  onClick(item: Dataset) {
-    console.log(item);
   }
 }

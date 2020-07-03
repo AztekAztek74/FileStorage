@@ -17,7 +17,8 @@ export class AppComponent {
 
   getList = () => {
     this.fileListService.getData().subscribe((data) => {
-      this.dataset = data as Dataset[];
+      const inner = data as Dataset[];
+      this.dataset = inner.reverse();
     });
   };
 }

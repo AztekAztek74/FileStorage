@@ -1,0 +1,29 @@
+.file-item {
+  &__file-name {
+    width: 70%;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #66ffbf;
+  }
+
+  &__user {
+    text-align: center;
+    width: 12%;
+    background-color: #5bfafa;
+  }
+
+  &__date {
+    text-align: center;
+    width: 13%;
+    background-color: #f8a8ff;
+  }
+
+  &__dell {
+    width: 5%;
+    cursor: pointer;
+    text-align: center;
+    align-items: center;
+    background-color: #ffa8a8;
+    color: #ff0000;
+  }
+}
