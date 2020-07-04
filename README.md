@@ -14,17 +14,17 @@ An application for downloading files, sorted by day. Uniqueness is compared sha2
 npm install
 ```
 
-4. Finally, run the server in `./WebAPI`
-
-```sh
-ctrl + f5
-```
-
-5. .NET Core build then restore in `./WebAPI`
+4. .NET Core build then restore in `./WebAPI`
 
 ```sh
 dotnet build
 dotnet restore
+```
+
+5. Start the server in `./WebAPI`
+
+```sh
+ctrl + f5
 ```
 
 6. Start the Angular application in `./FileStorageAngular`
