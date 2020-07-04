@@ -1,7 +1,6 @@
 .file-list {
-  display: flex;
+  display: grid;
   width: 100%;
-  flex-direction: column;
 
   &__headers {
     text-align: center;
