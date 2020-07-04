@@ -14,10 +14,10 @@ An application for downloading files, sorted by day. Uniqueness is compared sha2
 npm install
 ```
 
-4. Build the Angular application in `./FileStorageAngular`
+4. Finally, run the server in `./WebAPI`
 
 ```sh
-ng build
+ctrl + f5
 ```
 
 5. .NET Core build then restore in `./WebAPI`
@@ -27,10 +27,10 @@ dotnet build
 dotnet restore
 ```
 
-6. Finally, run the server in `./WebAPI`
+6. Start the Angular application in `./FileStorageAngular`
 
 ```sh
-dotnet run
+npm start
 ```
 
 The angular app will be served at `http://localhost:4200`
