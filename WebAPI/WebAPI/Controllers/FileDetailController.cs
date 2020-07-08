@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
         public async Task<ActionResult<IEnumerable<FileDetail>>> GetFileDetails()
         {
             var listDB = await _context.FileDetails.ToListAsync();
-            var listReady = listDB.FindAll(item => item.User == Environment.UserDomainName);
+            var listReady = listDB.Where(item => item.User == Environment.UserName).ToList();
             return listReady;
         }
 
@@ -141,7 +141,7 @@ namespace WebAPI.Controllers
                     }
 
 
-                    var newRecord = new FileDetail { FileName = fileName, FilePath = fullPath, User = Environment.UserDomainName, Date = DateTime.Now, NumberRecords  = records, FileSha256  = shaFile };
+                    var newRecord = new FileDetail { FileName = fileName, FilePath = fullPath, User = Environment.UserName, Date = DateTime.Now, NumberRecords  = records, FileSha256  = shaFile };
                     _context.FileDetails.Add(newRecord);
                     await _context.SaveChangesAsync();
                     return Ok();

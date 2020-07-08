@@ -1,43 +1,51 @@
+@import "../style/const";
+
 .file-list {
   display: grid;
   width: 100%;
 
   &__headers {
-    text-align: center;
     display: flex;
+    justify-content: center;
     width: 100%;
-    height: auto;
-    border-right: 2px solid #f7d66c;
-    border-left: 2px solid #f7d66c;
-    border-bottom: 2px solid #f7d66c;
+    min-height: 5vh;
+    background: rgb(100, 100, 100, 0.3)
+      radial-gradient(
+        circle at 50% 0,
+        rgba(255, 255, 255, 0.65),
+        rgba(255, 255, 255, 0.35)
+      );
+    box-shadow: inset rgba(0, 0, 0, 0.6) 0 -3px 8px,
+      inset rgba(252, 255, 255, 0.7) 0 3px 8px,
+      rgba(0, 0, 0, 0.8) 0 3px 8px -3px;
+    margin-bottom: 10px;
   }
 
   &__file-name {
+    @extend %font__file;
+    text-transform: uppercase;
+    margin: auto;
     width: 70%;
-    background-color: #66ffbf;
   }
 
   &__user {
+    @extend %font__user;
+    text-transform: uppercase;
+    margin: auto;
+    text-align: center;
     width: 12%;
-    border-left: 2px solid #f7d66c;
-    background-color: #5bfafa;
   }
 
   &__date {
+    @extend %font__date;
+    text-transform: uppercase;
+    margin: auto;
+    text-align: center;
     width: 13%;
-    border-left: 2px solid #f7d66c;
-    background-color: #f8a8ff;
   }
 
   &__dell {
     width: 5%;
-    background-color: #ffa8a8;
-  }
-
-  &__container {
-    width: 100%;
-    display: grid;
-    margin-top: 10px;
   }
 }
 
@@ -46,4 +54,14 @@
   height: auto;
   align-items: center;
   width: inherit;
+  margin-bottom: 5px;
+  min-height: 5vh;
+  border: 2px dashed #ccc;
+  background: rgb(100, 100, 100, 0.3)
+    radial-gradient(
+      circle at 50% 0,
+      rgba(255, 255, 255, 0.65),
+      rgba(255, 255, 255, 0.35)
+    );
+  box-shadow: 0 0 0 1px #ccc, inset 0 0 0 1px #ccc;
 }

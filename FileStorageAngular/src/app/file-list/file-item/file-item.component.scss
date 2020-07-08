@@ -1,21 +1,23 @@
+@import "../../style/const";
+
 .file-item {
   &__file-name {
+    @extend %font__file;
     width: 70%;
     overflow: hidden;
     cursor: pointer;
-    background-color: #66ffbf;
   }
 
   &__user {
+    @extend %font__user;
     text-align: center;
     width: 12%;
-    background-color: #5bfafa;
   }
 
   &__date {
+    @extend %font__date;
     text-align: center;
     width: 13%;
-    background-color: #f8a8ff;
   }
 
   &__dell {
@@ -23,7 +25,6 @@
     cursor: pointer;
     text-align: center;
     align-items: center;
-    background-color: #ffa8a8;
     color: #ff0000;
   }
 }

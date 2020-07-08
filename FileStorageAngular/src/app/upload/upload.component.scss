@@ -1,5 +1,21 @@
+@import "../style/const";
+
 .upload {
   text-align: center;
+
+  &__button {
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    padding: 3vh 7vh;
+    background-color: $upload__button__background-color;
+    transition: background-color 0.1s linear;
+
+    &:hover {
+      background-color: $upload__button__background-color-hover;
+      transition: background-color 0.1s linear;
+    }
+  }
   &__percent {
     color: #dfca0c;
   }
