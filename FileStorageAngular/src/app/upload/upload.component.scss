@@ -2,20 +2,6 @@
 
 .upload {
   text-align: center;
-
-  &__button {
-    display: inline-block;
-    border: none;
-    cursor: pointer;
-    padding: 3vh 7vh;
-    background-color: $upload__button__background-color;
-    transition: background-color 0.1s linear;
-
-    &:hover {
-      background-color: $upload__button__background-color-hover;
-      transition: background-color 0.1s linear;
-    }
-  }
   &__percent {
     color: #dfca0c;
   }
@@ -25,5 +11,70 @@
     color: #24aa44;
     margin-left: 15px;
     line-height: 36px;
+  }
+}
+
+.button {
+  display: inline-block;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 20px 30px;
+  width: 250px;
+  color: #fff;
+  background-color: transparent;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    .button__wave {
+      top: -150px;
+    }
+  }
+
+  &__text {
+    position: relative;
+  }
+
+  &__wave {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    width: 250px;
+    height: 250px;
+    background: linear-gradient(45deg, #4f00bc, #29abe2);
+    transition: 0.5s ease;
+
+    &::after,
+    &::before {
+      content: "";
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -75%);
+    }
+    &::after {
+      border-radius: 40%;
+      background-color: rgba(133, 123, 122, 0.5);
+      animation: wave 7s linear infinite;
+    }
+
+    &::before {
+      border-radius: 45%;
+      background-color: rgba(133, 123, 122, 1);
+      animation: wave 12s linear infinite;
+    }
+  }
+}
+
+@keyframes wave {
+  0% {
+    transform: translate(-50%, -75%) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -75%) rotate(360deg);
   }
 }
