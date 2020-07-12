@@ -91,7 +91,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                await _context.FileDetails.ToListAsync();
+                //await _context.FileDetails.ToListAsync();
 
                 var file = Request.Form.Files[0];
                 var folderName = Path.Combine("Resources", "Files");
@@ -118,7 +118,11 @@ namespace WebAPI.Controllers
                         shaFile = sha.ComputeHash(stream);
                     }
 
-                    if (_context.FileDetails.Any(item => item.FileSha256 == BitConverter.ToString(shaFile)))
+                    temporaryPath = (from item in _context.FileDetails
+                                    where item.FileSha256 == BitConverter.ToString(shaFile)
+                                    select item.FilePath ).FirstOrDefault();
+
+                    if (!String.IsNullOrEmpty(temporaryPath))
                     {
                         System.IO.File.Delete(fullPath);
                         fullPath = temporaryPath;
