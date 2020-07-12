@@ -17,8 +17,7 @@ namespace WebAPI.Migrations
                     FilePath = table.Column<string>(nullable: true),
                     User = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
-                    NumberRecords = table.Column<int>(nullable: false),
-                    FileSha256 = table.Column<byte[]>(nullable: true)
+                    FileSha256 = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

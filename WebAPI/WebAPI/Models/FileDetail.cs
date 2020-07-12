@@ -16,8 +16,7 @@ namespace WebAPI.Models
         public string FilePath { get; set; }
         public string User { get; set; }
         public DateTime Date { get; set; }
-        public int NumberRecords { get; set; }
-        public byte[] FileSha256 { get; set; }
+        public string FileSha256 { get; set; }
     }
 }
 

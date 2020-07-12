@@ -10,7 +10,7 @@ using WebAPI.Models;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(FileDetailContext))]
-    [Migration("20200701080633_InitialCreate")]
+    [Migration("20200712001754_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,11 +37,8 @@ namespace WebAPI.Migrations
                     b.Property<string>("FilePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("FileSha256")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<int>("NumberRecords")
-                        .HasColumnType("int");
+                    b.Property<string>("FileSha256")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("User")
                         .HasColumnType("nvarchar(max)");

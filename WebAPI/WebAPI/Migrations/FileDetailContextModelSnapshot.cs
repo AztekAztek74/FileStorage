@@ -35,11 +35,8 @@ namespace WebAPI.Migrations
                     b.Property<string>("FilePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("FileSha256")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<int>("NumberRecords")
-                        .HasColumnType("int");
+                    b.Property<string>("FileSha256")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("User")
                         .HasColumnType("nvarchar(max)");

@@ -29,11 +29,9 @@ namespace WebAPI.Controllers
 
         // GET: api/FileDetail
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FileDetail>>> GetFileDetails()
+        public ActionResult<IEnumerable<FileDetail>> GetFileDetails()
         {
-            var listDB = await _context.FileDetails.ToListAsync();
-            var listReady = listDB.Where(item => item.User == Environment.UserName).ToList();
-            return listReady;
+            return _context.FileDetails.Where(item => item.User == Environment.UserName).ToList();
         }
 
         // GET: api/FileDetail/5
@@ -52,9 +50,6 @@ namespace WebAPI.Controllers
             return File(memory, MimeUtility.GetMimeMapping(fileDetail.FileName), fileDetail.FileName);
 
         }
-
-
-        //System.Net.Http.Headers.
 
         // PUT: api/FileDetail/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -106,8 +101,6 @@ namespace WebAPI.Controllers
                     var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Value.Trim('"');
                     var fullPath = Path.Combine(pathToSave, Path.GetRandomFileName());
 
-                    var records = 1;
-
                     var temporaryPath = "";
 
 
@@ -125,23 +118,13 @@ namespace WebAPI.Controllers
                         shaFile = sha.ComputeHash(stream);
                     }
 
-                    foreach(var item in _context.FileDetails)
-                    {
-                        if (BitConverter.ToString(item.FileSha256) == BitConverter.ToString(shaFile))
-                        {
-                            records = ++item.NumberRecords;
-                            temporaryPath = item.FilePath;                            
-                        }
-                    }
-
-                    if (temporaryPath.Length > 0)
+                    if (_context.FileDetails.Any(item => item.FileSha256 == BitConverter.ToString(shaFile)))
                     {
                         System.IO.File.Delete(fullPath);
                         fullPath = temporaryPath;
                     }
 
-
-                    var newRecord = new FileDetail { FileName = fileName, FilePath = fullPath, User = Environment.UserName, Date = DateTime.Now, NumberRecords  = records, FileSha256  = shaFile };
+                    var newRecord = new FileDetail { FileName = fileName, FilePath = fullPath, User = Environment.UserName, Date = DateTime.Now, FileSha256  = BitConverter.ToString(shaFile) };
                     _context.FileDetails.Add(newRecord);
                     await _context.SaveChangesAsync();
                     return Ok();
@@ -164,27 +147,17 @@ namespace WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<FileDetail>> DeleteFileDetail(int id)
         {
-            await _context.FileDetails.ToListAsync();
+            //await _context.FileDetails.ToListAsync();
             var fileDetail = await _context.FileDetails.FindAsync(id);
+
             if (fileDetail == null)
             {
                 return NotFound();
             }
 
-            if (fileDetail.NumberRecords == 1)
+            if (!_context.FileDetails.Any(item =>  item.FileSha256 == fileDetail.FileSha256 && item.FileId != fileDetail.FileId))
             {
-
                 System.IO.File.Delete(fileDetail.FilePath);
-            }
-            else
-            {
-                foreach (var item in _context.FileDetails)
-                {
-                    if (BitConverter.ToString(item.FileSha256) == BitConverter.ToString(fileDetail.FileSha256))
-                    {
-                        item.NumberRecords--;
-                    }
-                }
             }
 
             _context.FileDetails.Remove(fileDetail);

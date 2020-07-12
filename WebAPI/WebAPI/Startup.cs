@@ -21,6 +21,7 @@ namespace WebAPI
 {
     public class Startup
     {
+        public static readonly ILoggerFactory MyLoggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,7 +38,7 @@ namespace WebAPI
                     options.JsonSerializerOptions.PropertyNamingPolicy = null;
                 });
             services.AddDbContext<FileDetailContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
+            options.UseLoggerFactory(MyLoggerFactory).UseSqlServer(Configuration.GetConnectionString("DevConnection")));
             services.Configure<FormOptions>(opt =>
             {
                 opt.ValueLengthLimit = int.MaxValue;
