@@ -12,6 +12,6 @@ namespace WebAPI.Models
         {
         }
         public DbSet<FileDetail> FileDetails { get; set; }
-        //public DbSet<ShaPathDetail> ShaPathDetails { get; set; }
+        public DbSet<ShaPathDetail> ShaPathDetails { get; set; }
     }
 }

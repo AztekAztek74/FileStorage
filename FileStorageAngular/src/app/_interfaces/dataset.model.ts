@@ -4,6 +4,4 @@ export interface Dataset {
   FilePath: string;
   User: string;
   Date: string;
-  NumberRecords: number;
-  FileSha256: string;
 }

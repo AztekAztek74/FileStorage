@@ -11,5 +11,7 @@ namespace WebAPI.Models
         [Key]
         public string FileSha256 { get; set; }
         public string FilePath { get; set; }
+
+        public ICollection<FileDetail> FileDetails { get; set; }
     }
 }

@@ -10,7 +10,7 @@ using WebAPI.Models;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(FileDetailContext))]
-    [Migration("20200712001754_InitialCreate")]
+    [Migration("20200712154324_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,18 +34,40 @@ namespace WebAPI.Migrations
                     b.Property<string>("FileName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FilePath")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FileSha256")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShaPathDetailFileSha256")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("User")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("FileId");
 
+                    b.HasIndex("ShaPathDetailFileSha256");
+
                     b.ToTable("FileDetails");
+                });
+
+            modelBuilder.Entity("WebAPI.Models.ShaPathDetail", b =>
+                {
+                    b.Property<string>("FileSha256")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FileSha256");
+
+                    b.ToTable("ShaPathDetails");
+                });
+
+            modelBuilder.Entity("WebAPI.Models.FileDetail", b =>
+                {
+                    b.HasOne("WebAPI.Models.ShaPathDetail", "ShaPathDetail")
+                        .WithMany("FileDetails")
+                        .HasForeignKey("ShaPathDetailFileSha256");
                 });
 #pragma warning restore 612, 618
         }
