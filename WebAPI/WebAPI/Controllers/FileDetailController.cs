@@ -14,6 +14,7 @@ using WebAPI.Models;
 using MimeMapping;
 using System.Security.Cryptography;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {
@@ -21,10 +22,12 @@ namespace WebAPI.Controllers
     [ApiController]
     public class FileDetailController : ControllerBase
     {
+        public IHttpContextAccessor _httpContextAccessor { get; set; }
         private readonly FileDetailContext _context;
 
-        public FileDetailController(FileDetailContext context)
+        public FileDetailController(FileDetailContext context, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             _context = context;
         }
 
@@ -32,10 +35,15 @@ namespace WebAPI.Controllers
         [HttpGet]
         public IEnumerable<HttpGetData> GetFileDetails()
         {
+            var currentUser = Environment.UserName;
+            if (_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) != null)
+            {
+                currentUser = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            }
             List<HttpGetData> Data = (
                 from item in _context.FileDetails
                 join inner in _context.ShaPathDetails on item.FileSha256 equals inner.FileSha256
-                where item.User == Environment.UserName && item.FileSha256 == inner.FileSha256
+                where item.User == currentUser && item.FileSha256 == inner.FileSha256
                 select new HttpGetData()
                 {
                     FileId = item.FileId,
@@ -106,7 +114,11 @@ namespace WebAPI.Controllers
         {
             try
             {
-
+                var currentUser = Environment.UserName;
+                if (_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) != null)
+                {
+                    currentUser = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                }
                 var file = Request.Form.Files[0];
                 var folderName = Path.Combine("Resources", "Files");
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
@@ -146,7 +158,7 @@ namespace WebAPI.Controllers
                         _context.ShaPathDetails.Add(newRecordPath);
                     }
 
-                    var newRecordFile = new FileDetail { FileName = fileName, User = Environment.UserName, Date = DateTime.Now, FileSha256  = BitConverter.ToString(shaFile) };
+                    var newRecordFile = new FileDetail { FileName = fileName, User = currentUser, Date = DateTime.Now, FileSha256  = BitConverter.ToString(shaFile) };
                     
                     _context.FileDetails.Add(newRecordFile);
                     
