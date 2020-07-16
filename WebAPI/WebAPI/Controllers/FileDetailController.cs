@@ -52,7 +52,6 @@ namespace WebAPI.Controllers
                     Date = item.Date
                 }).ToList();
             return Data;
-            //return _context.FileDetails.Where(item => item.User == Environment.UserName).ToList();
         }
 
         // GET: api/FileDetail/5
@@ -192,10 +191,8 @@ namespace WebAPI.Controllers
 
             if (_context.FileDetails.Count(item =>  item.FileSha256 == fileDetail.FileSha256)==1)
             {
-                var path = _context.ShaPathDetails.Where(item => fileDetail.FileSha256 == item.FileSha256).Select(inner => inner.FilePath).FirstOrDefault();
-                var sha = _context.ShaPathDetails.Where(item => fileDetail.FileSha256 == item.FileSha256).Select(inner => inner.FileSha256).FirstOrDefault();
-                var shaPathDetail = await _context.ShaPathDetails.FindAsync(sha);
-                System.IO.File.Delete(path);
+                var shaPathDetail = await _context.ShaPathDetails.FindAsync(fileDetail.FileSha256);
+                System.IO.File.Delete(shaPathDetail.FilePath);
                 _context.ShaPathDetails.Remove(shaPathDetail);
             }
 

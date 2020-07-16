@@ -9,7 +9,12 @@ import { FileListComponent } from './file-list/file-list.component';
 import { FileItemComponent } from './file-list/file-item/file-item.component';
 
 @NgModule({
-  declarations: [AppComponent, UploadComponent, FileListComponent, FileItemComponent],
+  declarations: [
+    AppComponent,
+    UploadComponent,
+    FileListComponent,
+    FileItemComponent,
+  ],
   imports: [BrowserModule, FormsModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],

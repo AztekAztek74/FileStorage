@@ -47,6 +47,8 @@ namespace WebAPI
                 opt.MultipartBoundaryLengthLimit = int.MaxValue;
                 opt.MemoryBufferThreshold = int.MaxValue;
             });
+
+            //services.AddMvc();
             services.AddCors();
             services.AddHttpContextAccessor();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -59,7 +61,7 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseAuthentication();
             app.UseCors(options =>
             options.WithOrigins("http://localhost:4200")
             .AllowAnyMethod()
